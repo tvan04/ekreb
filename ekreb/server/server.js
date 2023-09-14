@@ -1,14 +1,18 @@
 const express = require("express");
 const axios = require("axios");
 const app = express();
+const cors = require("cors"); 
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors());
 
 let score = 0;
+let originalWord = "";
 
-//scramble word from api 
+//scramble word from api
 function scrambleWord(word) {
-  const characters = inputString.split("");
+  const characters = word.split("");
 
   for (let i = characters.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -26,8 +30,8 @@ app.get("/api/ekreb/random-word", async (req, res) => {
     );
 
     if (response.data && response.data.length > 0) {
-      const randomWord = response.data[0];
-      const scrambledWord = scrambleWord(randomWord);
+      originalWord = response.data[0];
+      const scrambledWord = scrambleWord(originalWord);
       res.status(200).json({ word: scrambledWord });
     } else {
       res.status(404).json({ message: "Word not found in API" });
@@ -37,9 +41,9 @@ app.get("/api/ekreb/random-word", async (req, res) => {
   }
 });
 
-//check user guesses
+//check user guesses and update score accordingly 
 app.post("/api/ekreb/validate", (req, res) => {
-  const { guess, originalWord } = req.body;
+  const { guess } = req.body;
 
   if (guess === originalWord) {
     score += 1;
@@ -47,4 +51,20 @@ app.post("/api/ekreb/validate", (req, res) => {
   } else {
     res.status(200).json({ answer: false, score });
   }
+});
+
+//get user score
+app.get("/api/ekreb/score", (req, res) => {
+  res.status(200).json({ score });
+});
+
+//reset user score
+app.patch("/api/ekreb/score", (req, res) => {
+  score = 0;
+  res.status(200).json({ score });
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
