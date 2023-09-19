@@ -10,6 +10,7 @@ function App() {
   const [correct, setCorrect] = useState(false);
   const [gameState, setGameState] = useState("start");
   const [wordsPlayed, setWordsPlayed] = useState(0);
+  const [showHint, setShowHint] = useState(false);
 
   //checks to see how many words have been played and ends game after 5
   useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
       });
       setGuess("");
       setGameState("result");
+      setShowHint(false);
     } catch {
       console.error("Error submitting guess");
     }
@@ -66,13 +68,21 @@ function App() {
     }
   };
 
+  //changes state of the hint to true if button is clicked
+  const revealHint = () => {
+    if (originalWord && originalWord.length > 0) {
+      setShowHint(true);
+    }
+  };
+
   let content;
+  //start screen
   if (gameState === "start") {
     content = (
       <div className="start">
         <h1>Welcome to ekreb</h1>
-        <p>Guess the scrambled word! You have ___ minutes to unscramble the word.
-           After 5 words your score will be displayed</p>
+        <h2>Guess the scrambled word! You have ___ minutes to unscramble the word.
+           After 5 words your score will be displayed</h2>
         <button
           onClick={() => {
             setGameState("game");
@@ -83,6 +93,7 @@ function App() {
         </button>
       </div>
     );
+    //game screen
   } else if (gameState === "game") {
     content = (
       <div className="game">
@@ -96,9 +107,11 @@ function App() {
         />
         <button onClick={handleGuess}>Guess</button>
         <p>Score: {score}</p>
-        <button onClick={fetchWord}>New Word</button>
+        {showHint && <p>Hint: The first letter is {originalWord.charAt(0)}</p>}
+        <button onClick={revealHint}>Hint</button>
       </div>
     );
+    //result screen
   } else if (gameState === "result") {
     content = (
       <div className="result">
@@ -116,11 +129,12 @@ function App() {
         </button>
       </div>
     );
+    //end screen 
   } else if (gameState === "end") {
     content = (
       <div className="end">
         <h1>Game Over!</h1>
-        <p>Your score was: {score}</p>
+        <p>Your score was: {score}/5</p>
         <button onClick={restartGame}>Restart</button>
       </div>
     );
