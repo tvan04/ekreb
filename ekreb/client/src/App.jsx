@@ -25,7 +25,6 @@ function App() {
         guess: guess,
       });
       setGuess("");
-      setWordsPlayed(wordsPlayed + 1);
       setGameState("result");
     } catch {
       console.error("Error submitting guess");
@@ -72,7 +71,8 @@ function App() {
     content = (
       <div className="start">
         <h1>Welcome to ekreb</h1>
-        <p>Guess the scrambled word!</p>
+        <p>Guess the scrambled word! You have ___ minutes to unscramble the word.
+           After 5 words your score will be displayed</p>
         <button
           onClick={() => {
             setGameState("game");
@@ -107,6 +107,7 @@ function App() {
         <p>Original Word: {originalWord}</p>
         <button
           onClick={() => {
+            setWordsPlayed(wordsPlayed + 1);
             setGameState("game");
             fetchWord();
           }}

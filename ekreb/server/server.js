@@ -23,7 +23,7 @@ function scrambleWord(word) {
   const scrambledString = characters.join("");
   return scrambledString;
 }
-//get a word from the api
+//get a word from the api, scramble it, and send original and scrambled word to client
 app.get("/api/ekreb/random-word", async (req, res) => {
   try {
     const response = await axios.get(
@@ -42,7 +42,7 @@ app.get("/api/ekreb/random-word", async (req, res) => {
   }
 });
 
-//check user guesses and update score accordingly 
+//check user guesses and update score and correctness variables accordingly 
 app.post("/api/ekreb/validate", (req, res) => {
   const { guess } = req.body;
 
@@ -61,10 +61,11 @@ app.get("/api/ekreb/score", (req, res) => {
   res.status(200).json({ score, correctness });
 });
 
-//reset user score 
+//reset user score and correctness of guess
 app.patch("/api/ekreb/score", (req, res) => {
   score = 0;
-  res.status(200).json({ score });
+  correctness = false;
+  res.status(200).json({ score, correctness });
 });
 
 
