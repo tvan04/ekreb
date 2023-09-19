@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 let score = 0;
+let correctness = false;
 let originalWord = "";
 
 //scramble word from api
@@ -32,7 +33,7 @@ app.get("/api/ekreb/random-word", async (req, res) => {
     if (response.data && response.data.length > 0) {
       originalWord = response.data[0];
       const scrambledWord = scrambleWord(originalWord);
-      res.status(200).json({ word: scrambledWord });
+      res.status(200).json({ originalWord, scrambledWord });
     } else {
       res.status(404).json({ message: "Word not found in API" });
     }
@@ -47,18 +48,20 @@ app.post("/api/ekreb/validate", (req, res) => {
 
   if (guess === originalWord) {
     score += 1;
-    res.status(200).json({ answer: true, score });
+    correctness = true;
+    res.status(200).json({score});
   } else {
-    res.status(200).json({ answer: false, score });
+    res.status(200).json({score});
+    correctness = false;
   }
 });
 
-//get user score
+//get user score and correctness of guess
 app.get("/api/ekreb/score", (req, res) => {
-  res.status(200).json({ score });
+  res.status(200).json({ score, correctness });
 });
 
-//reset user score
+//reset user score 
 app.patch("/api/ekreb/score", (req, res) => {
   score = 0;
   res.status(200).json({ score });
