@@ -11,13 +11,30 @@ function App() {
   const [gameState, setGameState] = useState("start");
   const [wordsPlayed, setWordsPlayed] = useState(0);
   const [showHint, setShowHint] = useState(false);
+  const [timer, setTimer] = useState(60);
 
-  //checks to see how many words have been played and ends game after 5
+  //ends game after 5 words and controls timer for each word
   useEffect(() => {
-    if (wordsPlayed == 5) {
+    // number of rounds
+    if (wordsPlayed === 5) {
       setGameState("end");
     }
-  }, [wordsPlayed]);
+
+    // timer
+    if (gameState === "game") {
+      const timerId = setInterval(() => {
+        if (timer > 0) {
+          setTimer((prevTimer) => prevTimer - 1);
+        } else {
+          setGuess("");
+          handleGuess();
+          clearInterval(timerId);
+        }
+      }, 1000);
+
+      return () => clearInterval(timerId);
+    }
+  }, [wordsPlayed, gameState, timer]);
 
   //sends guess to sever for validation, clears guess, fetches new word, increments words played
   const handleGuess = async () => {
@@ -28,6 +45,7 @@ function App() {
       setGuess("");
       setGameState("result");
       setShowHint(false);
+      setTimer(60);
     } catch {
       console.error("Error submitting guess");
     }
@@ -81,8 +99,10 @@ function App() {
     content = (
       <div className="start">
         <h1>Welcome to ekreb</h1>
-        <h2>Guess the scrambled word! You have ___ minutes to unscramble the word.
-           After 5 words your score will be displayed</h2>
+        <h2>
+          Guess the scrambled word! You have ___ minutes to unscramble the word.
+          After 5 words your score will be displayed
+        </h2>
         <button
           onClick={() => {
             setGameState("game");
@@ -106,7 +126,7 @@ function App() {
           onChange={(e) => setGuess(e.target.value)}
         />
         <button onClick={handleGuess}>Guess</button>
-        <p>Score: {score}</p>
+        <p>Time Left: {timer}</p>
         {showHint && <p>Hint: The first letter is {originalWord.charAt(0)}</p>}
         <button onClick={revealHint}>Hint</button>
       </div>
@@ -129,7 +149,7 @@ function App() {
         </button>
       </div>
     );
-    //end screen 
+    //end screen
   } else if (gameState === "end") {
     content = (
       <div className="end">
