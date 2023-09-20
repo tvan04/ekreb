@@ -7,9 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "(cd client && npm install); (cd server && npm install)",
     "client": "cd client && npm run dev",
-    "server": "cd server && node server.js"
+    "server": "cd server && node server.js",
+    "game": "concurrently \"npm run client\"  \"npm run server\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.1"
+  }
 }

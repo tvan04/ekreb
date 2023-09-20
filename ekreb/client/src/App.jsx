@@ -36,7 +36,7 @@ function App() {
     }
   }, [wordsPlayed, gameState, timer]);
 
-  //sends guess to sever for validation, clears guess, fetches new word, increments words played
+  //sends guess to sever for validation, clears guess, fetches new word, increments words played, sets timer to 60
   const handleGuess = async () => {
     try {
       await axios.post("http://localhost:3000/api/ekreb/validate", {
@@ -59,7 +59,7 @@ function App() {
     }
   };
 
-  //fetches a new word from the server
+  //fetches a new word from the server and stores original and scrambled word in states 
   const fetchWord = async () => {
     try {
       const response = await axios.get(
@@ -76,9 +76,10 @@ function App() {
 
   //resets game state, score, words played, and resets user score on server
   const restartGame = async () => {
-    setGameState("game");
+    setGameState("start");
     setScore(0);
     setWordsPlayed(0);
+
     try {
       await axios.patch("http://localhost:3000/api/ekreb/score");
     } catch (error) {
@@ -98,11 +99,12 @@ function App() {
   if (gameState === "start") {
     content = (
       <div className="start">
-        <h1>Welcome to ekreb</h1>
+        <h1>ekreb</h1>
         <h2>
-          Guess the scrambled word! You have ___ minutes to unscramble the word.
-          After 5 words your score will be displayed
+          Guess the scrambled word! You have 1 minute to unscramble a word.
+          After 5 words your score will be displayed.
         </h2>
+
         <button
           onClick={() => {
             setGameState("game");
@@ -117,18 +119,17 @@ function App() {
   } else if (gameState === "game") {
     content = (
       <div className="game">
-        <h1>ekreb</h1>
-        <p>Word: {scrambledWord}</p>
+        <h1>Word: {scrambledWord}</h1>
         <input
           type="string"
           placeholder="Enter your guess here!"
           value={guess}
           onChange={(e) => setGuess(e.target.value)}
         />
-        <button onClick={handleGuess}>Guess</button>
+        <button id="guess" onClick={handleGuess}>Guess</button>
         <p>Time Left: {timer}</p>
         {showHint && <p>Hint: The first letter is {originalWord.charAt(0)}</p>}
-        <button onClick={revealHint}>Hint</button>
+        <button id="hint" onClick={revealHint}>Hint</button>
       </div>
     );
     //result screen
