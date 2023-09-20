@@ -58,3 +58,7 @@ The words used in this project are taken from this random word API:
 
 https://random-word-api.herokuapp.com/home
 
+
+## Reflection
+
+I created the frontend using React, and I created the RESTful API using Node.js and Express. I got my words from an API. I was able to implement the timer using useEffect, and I gave the first letter of the unscrambled word as a hint. I also implemented a restart button that resets the states in the frontend and backend so you don't have to completely restart the frontend and backend if you want to play again. Overall, I think this was a good challenge. It was simple enough to where most people could do it, but it also allowed for a decent amount of customizability. 
