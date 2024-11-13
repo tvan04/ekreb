@@ -34,7 +34,7 @@ Clone the project
 Navigate to the project directory
 
 ```bash
-  cd change-coding-challenge-2023-tvan04/ekreb/
+  cd /ekreb/
 ```
 
 Install dependencies
