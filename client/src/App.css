@@ -1,0 +1,81 @@
+.start,
+.game,
+.result,
+.end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #fff; /* Set the primary color to white */
+  color: #000; /* Text color */
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+button {
+  background-color: #2196F3; 
+  color: #fff;
+  font-size: 1.25rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: #1976D2; 
+  }
+}
+
+/* Styles for specific game states */
+.start button {
+  margin-top: 16px;
+  height: 60px;
+  width: 200px;
+  
+}
+
+.game input {
+  font-size: 1.5rem; 
+  padding: 10px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.game p {
+  font-size: 2rem; 
+}
+
+.game #hint {
+  background-color: rgb(206, 78, 78);
+}
+
+.result h2 {
+  font-size: 2rem;
+  margin-top: 16px;
+}
+
+.result p {
+  font-size: 1.5rem; 
+  margin-top: 8px;
+}
+
+.end h1 {
+  font-size: 3rem;
+  margin-top: 16px;
+}
+
+.end p {
+  font-size: 1.5rem;
+  margin-top: 16px;
+}
